@@ -25,30 +25,34 @@ public class Exe4_1 {
             String con_string = "jdbc:mysql://localhost:3306/student";
             conn = DriverManager.getConnection(con_string,"root","");        
             System.out.println("Connection Successfull !!");                
-            String select_query = "INSERT into stud values(?,?,?)";
+            
+            /*String select_query = "INSERT into stud values(?,?,?)";
             PreparedStatement stmt = conn.prepareStatement(select_query);
             stmt.setInt(1,4);
             stmt.setString(2, "Rushik");
-            stmt.setInt(3, 18);
+            stmt.setInt(3, 18);*/
             
-            int rows = stmt.executeUpdate();
-            System.out.println(rows);;
-            /*
+            String select_query = "SELECT Stud_Id,Stud_Name,Birth_Date,City,Course,Semester,Division FROM student_details";
+            Statement stmt = conn.createStatement();
+            ResultSet rset = stmt.executeQuery(select_query);
+           
+            
             while (rset.next()){
                 System.out.println(
-                        "Stud Rollno: " + rset.getInt("Rollno") 
-                        +"  Stud Name : " + rset.getString("Sname") 
-                        +"  Stud Age : " + rset.getString("Age") 
-                       
+                        "Stud_Id: " + rset.getInt("Stud_Id") 
+                        +"  Stud Name : " + rset.getString("Stud_Name") 
+                        +"  Birth Date : " + rset.getDate("Birth_Date") 
+                        +"  City : " + rset.getString("City")
+                        +"  Course : " + rset.getString("Course")
+                        +"  Semester : " + rset.getString("Semester")
+                        +"  Division : " + rset.getInt("Division")                                              
                 );                
-            }*/
+            }
             stmt.close();
             conn.close();
         }
         catch(Exception e){
             System.out.println(e);
-        }
-        
-        
+        }      
     }
 }
