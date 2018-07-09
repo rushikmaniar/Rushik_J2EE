@@ -6,10 +6,7 @@
 package tut2;
 
 import java.sql.*;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *
@@ -26,8 +23,13 @@ public class Exe4_4 extends javax.swing.JFrame {
         initComponents();
         try {
             Class.forName("com.mysql.jdbc.Driver");
+            //connect  to Db         
+            String con_string = "jdbc:mysql://localhost:3306/student";
+            conn = DriverManager.getConnection(con_string, "root", "");
+            System.out.println("Connection Successfull !!");
         } catch (Exception e) {
             System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -164,8 +166,12 @@ public class Exe4_4 extends javax.swing.JFrame {
         jLabel_Rollno.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel_Rollno.setText("Rollno :");
 
+        jTextField_Rollno.setEnabled(false);
+
         jLabel_Rollno1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel_Rollno1.setText("Student Name :");
+
+        jTextField_StudName.setEnabled(false);
 
         jLabel_Mark1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel_Mark1.setText("Mark1:");
@@ -177,6 +183,11 @@ public class Exe4_4 extends javax.swing.JFrame {
         jLabel_Mark3.setText("Mark3:");
 
         jButton_UPDATE.setText("UPDATE");
+        jButton_UPDATE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_UPDATEActionPerformed(evt);
+            }
+        });
 
         jButton_ADD1.setText("ADD");
         jButton_ADD1.addActionListener(new java.awt.event.ActionListener() {
@@ -294,18 +305,7 @@ public class Exe4_4 extends javax.swing.JFrame {
 
         //include driver
         try {
-
-            //connect  to Db         
-            String con_string = "jdbc:mysql://localhost:3306/student";
-            conn = DriverManager.getConnection(con_string, "root", "");
-            System.out.println("Connection Successfull !!");
-
-            /*String select_query = "INSERT into stud values(?,?,?)";
-            PreparedStatement stmt = conn.prepareStatement(select_query);
-            stmt.setInt(1,4);
-            stmt.setString(2, "Rushik");
-            stmt.setInt(3, 18);*/
-            String select_query = "SELECT Stud_Id,Stud_Name,Birth_Date,City,Course,Semester,Division FROM student_details WHERE Stud_Id = ? LIMIT 1";
+            String select_query = "SELECT sd.Stud_Id,sd.Stud_Name,sd.Birth_Date,sd.City,sd.Course,sd.Semester,sd.Division,sm.Mark1,sm.Mark2,sm.Mark3,sm.Total,sm.Percentage,sm.Grade FROM student_details as sd LEFT JOIN student_marksheet as sm ON sd.Stud_id = sm.stud_id  WHERE sd.Stud_Id = ? LIMIT 1";
             PreparedStatement stmt = conn.prepareStatement(select_query);
             Integer entered_rollno = Integer.parseInt(jTextField_Jdailog_Rollno.getText());
 
@@ -321,12 +321,20 @@ public class Exe4_4 extends javax.swing.JFrame {
                         + "\nCity : " + rset.getString("City")
                         + "\nCourse : " + rset.getString("Course")
                         + "\nSemester : " + rset.getString("Semester")
-                        + "\nDivision : " + rset.getInt("Division");
+                        + "\nDivision : " + rset.getInt("Division")
+                        + "\nMark1 :" + rset.getInt("Mark1")
+                        + "\nMark2 :" + rset.getInt("Mark2")
+                        + "\nMark3 :" + rset.getInt("Mark3")
+                        + "\nTotal :" + rset.getInt("Total")
+                        + "\nPercentage :" + rset.getInt("Percentage") + " % "
+                        + "\nGrade :" + rset.getString("Grade");
 
                 //set Text
                 jTextField_Rollno.setText(rset.getString("Stud_Id"));
                 jTextField_StudName.setText(rset.getString("Stud_Name"));
-
+                jTextField_Mark1.setText(rset.getString("Mark1"));
+                jTextField_Mark2.setText(rset.getString("Mark2"));
+                jTextField_Mark3.setText(rset.getString("Mark3"));
                 //set Editable False
                 jTextField_Rollno.setEditable(false);
                 jTextField_StudName.setEditable(false);
@@ -335,20 +343,12 @@ public class Exe4_4 extends javax.swing.JFrame {
                 jTextArea_output.setText(textarea_output);
                 jDialogBox.dispose();
             } else {
-
-                jLabel1_MessageBox.setText("No Record Found");
-                jDialog_MessageBox.setVisible(true);
-                jTextArea_output.setText("");
-                jTextField_Rollno.setText("");
-                jTextField_StudName.setText("");
-                jTextField_Mark1.setText("");
-                jTextField_Mark1.setText("");
-                jTextField_Mark1.setText("");
-                jDialogBox.dispose();
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
             }
             stmt.close();
-           
+
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(e);
         }
     }//GEN-LAST:event_jButton_Dialog_FINDActionPerformed
@@ -365,7 +365,7 @@ public class Exe4_4 extends javax.swing.JFrame {
             int dialogResult = jOptionPane_MeessageBox.showConfirmDialog(null, "Are You Sure.This will Not revert?", "Warning", dialogButton);
             jOptionPane_MeessageBox.setVisible(true);
             if (dialogResult == jOptionPane_MeessageBox.YES_OPTION) {
-                
+
                 System.out.println("Yes");
                 // Saving code here
                 try {
@@ -379,46 +379,191 @@ public class Exe4_4 extends javax.swing.JFrame {
                     Integer result = stmt.executeUpdate();
                     System.out.println(result);
                     if (result != 0) {
-                        jLabel1_MessageBox.setText(result.toString() + " Record deleted");
-                        jDialog_MessageBox.setVisible(true);
+                        JOptionPane.showMessageDialog(null, result.toString() + " Record Deleted", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No Record Deleted", "Info", JOptionPane.INFORMATION_MESSAGE);
                     }
-                    else {
-                    jLabel1_MessageBox.setText("No Record deleted");
-                    jDialog_MessageBox.setVisible(true);}
-
                 } catch (SQLException e) {
                     System.out.println(e);
                 }
             } else {
-                
+                //do nothing
             }
 
         } else {
-         JOptionPane.showMessageDialog (null, "No Student Selected", "Title", JOptionPane.ERROR_MESSAGE);
-           
+            JOptionPane.showMessageDialog(null, "No Student Selected", "Title", JOptionPane.ERROR_MESSAGE);
         }
 
-
+        emptyControls();
     }//GEN-LAST:event_jButton_DELETEActionPerformed
 
     private void jButton_ADD1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ADD1ActionPerformed
         // TODO add your handling code here:
-        
-        
-        //get textfeild value
-        
-        Integer rollno = Integer.parseInt(jTextField_Rollno.getText());
-        String name = jTextField_StudName.getText();
-        Integer m1 = Integer.parseInt(jTextField_Mark1.getText());
-        Integer m2 = Integer.parseInt(jTextField_Mark2.getText());
-        Integer m3 = Integer.parseInt(jTextField_Mark3.getText());
-        
-        Integer total = m1 + m2 + m3;
-        Float per = ( Float.parseFloat(total.toString()) / 3);
-        
-        //insert query
-        
+        if (!jTextField_Rollno.getText().equals("")) {
+            Integer entered_rollno = Integer.parseInt(jTextField_Jdailog_Rollno.getText());
+            //get textfeild value
+            Integer rollno = Integer.parseInt(jTextField_Rollno.getText());
+            String name = jTextField_StudName.getText();
+            Integer m1 = Integer.parseInt(jTextField_Mark1.getText());
+            Integer m2 = Integer.parseInt(jTextField_Mark2.getText());
+            Integer m3 = Integer.parseInt(jTextField_Mark3.getText());
+
+            Integer total = m1 + m2 + m3;
+            Float per = (Float.parseFloat(total.toString())) / 3;
+            String grade = "";
+            if (m1 >= 35 && m2 >= 35 && m3 >= 35) {
+                if (per >= 90) {
+                    grade = "A+";
+                } else if (per >= 80 && per <= 90) {
+                    grade = "A";
+                } else if (per >= 70 && per <= 80) {
+                    grade = "B";
+                } else if (per >= 60 && per <= 70) {
+                    grade = "C";
+                } else if (per >= 50 && per <= 60) {
+                    grade = "D";
+                } else {
+                    grade = "E";
+                }
+            } else {
+                per = Float.parseFloat("0.0");
+                grade = "Fail";
+            }
+
+            //update query 
+            try {
+                //check if record exits 
+                String select_query = "SELECT * FROM student_marksheet WHERE Stud_Id = ?";
+                PreparedStatement select_stmt = conn.prepareStatement(select_query);
+                select_stmt.setInt(1, entered_rollno);
+                ResultSet select_result = select_stmt.executeQuery();
+                PreparedStatement stmt;
+                String msg = "";
+                System.out.println(select_stmt);
+                
+                if (!select_result.next()) {
+                    //insert record
+                    String insert_query = "INSERT INTO `student_marksheet`(`Stud_Id`, `Mark1`, `Mark2`, `Mark3`, `Total`, `Percentage`, `Grade`) VALUES (?,?,?,?,?,?,?)";
+                    stmt = conn.prepareStatement(insert_query);
+                    //bind values 
+                    stmt.setInt(1, entered_rollno);
+                    stmt.setInt(2, m1);
+                    stmt.setInt(3, m2);
+                    stmt.setInt(4, m3);
+                    stmt.setInt(5, total);
+                    stmt.setFloat(6, per);
+                    stmt.setString(7, grade);
+                    msg = "Row Added";
+                } else {
+                    //update record 
+                    String update_query = "UPDATE student_marksheet SET Mark1 = ? , Mark2 = ? , Mark3 = ? , Total = ? , Percentage = ? , Grade = ? WHERE  Stud_Id = ?";
+                    stmt = conn.prepareStatement(update_query);
+
+                    //bind values 
+                    stmt.setInt(1, m1);
+                    stmt.setInt(2, m2);
+                    stmt.setInt(3, m3);
+                    stmt.setInt(4, total);
+                    stmt.setFloat(5, per);
+                    stmt.setString(6, grade);
+                    stmt.setInt(7, entered_rollno);
+                    msg = "Row Updated";
+                }
+                System.out.println(stmt);
+                Integer result = stmt.executeUpdate();
+                System.out.println(result);
+                if (result != 0) {
+                    JOptionPane.showMessageDialog(null, result.toString() + msg, "Info", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No row Update", "Info", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, "Oops!! " + e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Oops!! No Student Selected", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
+        emptyControls();
+
     }//GEN-LAST:event_jButton_ADD1ActionPerformed
+
+    private void jButton_UPDATEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_UPDATEActionPerformed
+        // TODO add your handling code here:
+        if (!jTextField_Rollno.getText().equals("")) {
+            //get textfeild value
+            Integer rollno = Integer.parseInt(jTextField_Rollno.getText());
+            String name = jTextField_StudName.getText();
+            Integer m1 = Integer.parseInt(jTextField_Mark1.getText());
+            Integer m2 = Integer.parseInt(jTextField_Mark2.getText());
+            Integer m3 = Integer.parseInt(jTextField_Mark3.getText());
+
+            Integer total = m1 + m2 + m3;
+            Float per = (Float.parseFloat(total.toString()) / 3);
+            String grade = "";
+            if (m1 >= 35 && m2 >= 35 && m3 >= 35) {
+                if (per >= 90) {
+                    grade = "A+";
+                } else if (per >= 80 && per <= 90) {
+                    grade = "A";
+                } else if (per >= 70 && per <= 80) {
+                    grade = "B";
+                } else if (per >= 60 && per <= 70) {
+                    grade = "C";
+                } else if (per >= 50 && per <= 60) {
+                    grade = "D";
+                } else {
+                    grade = "E";
+                }
+            } else {
+                per = Float.parseFloat("0.0");
+                grade = "Fail";
+            }
+
+            //update query 
+            try {
+                String update_query = "UPDATE student_marksheet SET Mark1 = ? , Mark2 = ? , Mark3 = ? , Total = ? , Percentage = ? , Grade = ? WHERE  Stud_Id = ?";
+                PreparedStatement stmt = conn.prepareStatement(update_query);
+
+                Integer entered_rollno = Integer.parseInt(jTextField_Jdailog_Rollno.getText());
+
+                //binfd values 
+                stmt.setInt(1, m1);
+                stmt.setInt(2, m2);
+                stmt.setInt(3, m3);
+                stmt.setInt(4, total);
+                stmt.setFloat(5, per);
+                stmt.setString(6, grade);
+                stmt.setInt(7, entered_rollno);
+
+                System.out.println(stmt);
+                Integer result = stmt.executeUpdate();
+                System.out.println(result);
+                if (result != 0) {
+                    JOptionPane.showMessageDialog(null, result.toString() + " Record update", "Info", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No row Update", "Info", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, "Oops!! " + e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Oops!! No Student Selected", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
+        emptyControls();
+    }//GEN-LAST:event_jButton_UPDATEActionPerformed
+
+    public void emptyControls() {
+        jTextField_Rollno.setText("");
+        jTextField_StudName.setText("");
+        jTextField_Mark1.setText("");
+        jTextField_Mark2.setText("");
+        jTextField_Mark3.setText("");
+        jTextArea_output.setText("");
+    }
 
     /**
      * @param args the command line arguments

@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 package tut2;
+
 import java.sql.*;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author rushikwin8
@@ -17,12 +19,13 @@ public class Exe4_5 extends javax.swing.JFrame {
      */
     public Connection conn = null;
     ResultSet rset = null;
+
     public Exe4_5() {
         initComponents();
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            
-             String con_string = "jdbc:mysql://localhost:3306/student";
+
+            String con_string = "jdbc:mysql://localhost:3306/student";
             conn = DriverManager.getConnection(con_string, "root", "");
             System.out.println("Connection Successfull !!");
 
@@ -45,39 +48,22 @@ public class Exe4_5 extends javax.swing.JFrame {
                     + "sm.Percentage,"
                     + "sm.Grade "
                     + "FROM student_details as sd "
-                    + " JOIN student_marksheet as sm ON sd.Stud_Id= sm.Stud_Id";
+                    + " LEFT JOIN student_marksheet as sm ON sd.Stud_Id = sm.Stud_Id";
+            
             PreparedStatement stmt = conn.prepareStatement(select_query);
             System.out.println(stmt);
             this.rset = stmt.executeQuery();
-            
-            
-            if (rset.next()) {
-                //rset.next();
-                jTextField_Rollno.setText(rset.getString("sd.Stud_Id"));
-                jTextField_StudentName.setText(rset.getString("sd.Stud_Name"));
-                jTextField_birthdate.setText(rset.getString("sd.Birth_Date"));
-                jTextField_City.setText(rset.getString("sd.City"));
-                jTextField_course.setText(rset.getString("sd.Course"));
-                jTextField_sem.setText(rset.getString("sd.Semester"));
-                jTextField_Div.setText(rset.getString("sd.Division"));
-                
-                jTextField_Mark1.setText(rset.getString("sm.Mark1"));
-                jTextField_Mark2.setText(rset.getString("sm.Mark2"));
-                jTextField_Mark3.setText(rset.getString("sm.Mark3"));
-                jTextField_Total.setText(rset.getString("sm.Total"));
-                jTextField_Per.setText(rset.getString("sm.Percentage"));
-                jTextField_Grade.setText(rset.getString("sm.Grade"));
-                
-                                    
-            } else {
 
-                JOptionPane.showMessageDialog (null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+            if (rset.next()) {
+                fillData();
+            } else {
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(e);
         }
-        
-        
+
     }
 
     /**
@@ -306,121 +292,52 @@ public class Exe4_5 extends javax.swing.JFrame {
 
     private void jButton_FirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_FirstActionPerformed
         // TODO add your handling code here:
-        try{
-        if (this.rset.first()) {
-                //rset.next();
-                jTextField_Rollno.setText(rset.getString("sd.Stud_Id"));
-                jTextField_StudentName.setText(rset.getString("sd.Stud_Name"));
-                jTextField_birthdate.setText(rset.getString("sd.Birth_Date"));
-                jTextField_City.setText(rset.getString("sd.City"));
-                jTextField_course.setText(rset.getString("sd.Course"));
-                jTextField_sem.setText(rset.getString("sd.Semester"));
-                jTextField_Div.setText(rset.getString("sd.Division"));
-                
-                jTextField_Mark1.setText(rset.getString("sm.Mark1"));
-                jTextField_Mark2.setText(rset.getString("sm.Mark2"));
-                jTextField_Mark3.setText(rset.getString("sm.Mark3"));
-                jTextField_Total.setText(rset.getString("sm.Total"));
-                jTextField_Per.setText(rset.getString("sm.Percentage"));
-                jTextField_Grade.setText(rset.getString("sm.Grade"));
-                
-                                    
+        try {
+            if (this.rset.first()) {
+                fillData();
             } else {
-
-                JOptionPane.showMessageDialog (null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-        
     }//GEN-LAST:event_jButton_FirstActionPerformed
 
     private void jButton_LastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_LastActionPerformed
         // TODO add your handling code here:
-         try{
-        if (this.rset.last()) {
-                //rset.next();
-                jTextField_Rollno.setText(rset.getString("sd.Stud_Id"));
-                jTextField_StudentName.setText(rset.getString("sd.Stud_Name"));
-                jTextField_birthdate.setText(rset.getString("sd.Birth_Date"));
-                jTextField_City.setText(rset.getString("sd.City"));
-                jTextField_course.setText(rset.getString("sd.Course"));
-                jTextField_sem.setText(rset.getString("sd.Semester"));
-                jTextField_Div.setText(rset.getString("sd.Division"));
-                
-                jTextField_Mark1.setText(rset.getString("sm.Mark1"));
-                jTextField_Mark2.setText(rset.getString("sm.Mark2"));
-                jTextField_Mark3.setText(rset.getString("sm.Mark3"));
-                jTextField_Total.setText(rset.getString("sm.Total"));
-                jTextField_Per.setText(rset.getString("sm.Percentage"));
-                jTextField_Grade.setText(rset.getString("sm.Grade"));
-                
-                                    
+        try {
+            if (this.rset.last()) {
+                fillData();
             } else {
-
-                JOptionPane.showMessageDialog (null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }//GEN-LAST:event_jButton_LastActionPerformed
 
     private void jButton_PrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PrevActionPerformed
         // TODO add your handling code here:
-         try{
-        if (this.rset.previous()) {
-                //rset.next();
-                jTextField_Rollno.setText(rset.getString("sd.Stud_Id"));
-                jTextField_StudentName.setText(rset.getString("sd.Stud_Name"));
-                jTextField_birthdate.setText(rset.getString("sd.Birth_Date"));
-                jTextField_City.setText(rset.getString("sd.City"));
-                jTextField_course.setText(rset.getString("sd.Course"));
-                jTextField_sem.setText(rset.getString("sd.Semester"));
-                jTextField_Div.setText(rset.getString("sd.Division"));
-                
-                jTextField_Mark1.setText(rset.getString("sm.Mark1"));
-                jTextField_Mark2.setText(rset.getString("sm.Mark2"));
-                jTextField_Mark3.setText(rset.getString("sm.Mark3"));
-                jTextField_Total.setText(rset.getString("sm.Total"));
-                jTextField_Per.setText(rset.getString("sm.Percentage"));
-                jTextField_Grade.setText(rset.getString("sm.Grade"));
-                
-                                    
+        try {
+            if (this.rset.previous()) {
+                fillData();
             } else {
-
-                JOptionPane.showMessageDialog (null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }//GEN-LAST:event_jButton_PrevActionPerformed
 
     private void jButton_NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_NextActionPerformed
         // TODO add your handling code here:
-         try{
-        if (this.rset.next()) {
-                //rset.next();
-                jTextField_Rollno.setText(rset.getString("sd.Stud_Id"));
-                jTextField_StudentName.setText(rset.getString("sd.Stud_Name"));
-                jTextField_birthdate.setText(rset.getString("sd.Birth_Date"));
-                jTextField_City.setText(rset.getString("sd.City"));
-                jTextField_course.setText(rset.getString("sd.Course"));
-                jTextField_sem.setText(rset.getString("sd.Semester"));
-                jTextField_Div.setText(rset.getString("sd.Division"));
-                
-                jTextField_Mark1.setText(rset.getString("sm.Mark1"));
-                jTextField_Mark2.setText(rset.getString("sm.Mark2"));
-                jTextField_Mark3.setText(rset.getString("sm.Mark3"));
-                jTextField_Total.setText(rset.getString("sm.Total"));
-                jTextField_Per.setText(rset.getString("sm.Percentage"));
-                jTextField_Grade.setText(rset.getString("sm.Grade"));
-                
-                                    
+        try {
+            if (this.rset.next()) {
+                fillData();
             } else {
-
-                JOptionPane.showMessageDialog (null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }//GEN-LAST:event_jButton_NextActionPerformed
@@ -460,6 +377,27 @@ public class Exe4_5 extends javax.swing.JFrame {
         });
     }
 
+    public void fillData() {
+        try {
+            jTextField_Rollno.setText(rset.getString("sd.Stud_Id"));
+            jTextField_StudentName.setText(rset.getString("sd.Stud_Name"));
+            jTextField_birthdate.setText(rset.getString("sd.Birth_Date"));
+            jTextField_City.setText(rset.getString("sd.City"));
+            jTextField_course.setText(rset.getString("sd.Course"));
+            jTextField_sem.setText(rset.getString("sd.Semester"));
+            jTextField_Div.setText(rset.getString("sd.Division"));
+
+            jTextField_Mark1.setText(rset.getString("sm.Mark1"));
+            jTextField_Mark2.setText(rset.getString("sm.Mark2"));
+            jTextField_Mark3.setText(rset.getString("sm.Mark3"));
+            jTextField_Total.setText(rset.getString("sm.Total"));
+            jTextField_Per.setText(rset.getString("sm.Percentage"));
+            jTextField_Grade.setText(rset.getString("sm.Grade"));
+        } catch (Exception e) {
+            System.err.println(e);
+            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_First;
     private javax.swing.JButton jButton_Last;

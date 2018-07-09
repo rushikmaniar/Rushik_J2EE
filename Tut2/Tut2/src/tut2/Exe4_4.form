@@ -282,6 +282,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField_Rollno">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel_Rollno1">
       <Properties>
@@ -292,6 +295,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField_StudName">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel_Mark1">
       <Properties>
@@ -327,6 +333,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="UPDATE"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_UPDATEActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton_ADD1">
       <Properties>
