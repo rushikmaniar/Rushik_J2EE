@@ -1,19 +1,31 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To chan    @Override
+    public StringBuffer format(java.util.Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public java.util.Date parse(String source, ParsePosition pos) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+ge this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package tut2;
 
 import java.sql.*;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
+import java.util.*;
+import java.text.*;
 
 /**
  *
  * @author Admin
  */
-public class Exe2_6 extends javax.swing.JFrame {
+public class Exe2_7 extends javax.swing.JFrame {
 
     /**
      * Creates new form Exe2_6
@@ -21,7 +33,7 @@ public class Exe2_6 extends javax.swing.JFrame {
     DefaultTableModel tableModel;
     public Connection conn = null;
 
-    public Exe2_6() {
+    public Exe2_7() {
         initComponents();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -44,16 +56,16 @@ public class Exe2_6 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        criteria = new javax.swing.JComboBox<>();
-        querybox = new javax.swing.JTextField();
         btn_search = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        enddate = new org.jdesktop.swingx.JXDatePicker();
+        startdate = new org.jdesktop.swingx.JXDatePicker();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Student Record Filter");
-
-        criteria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Rollno", "Name" }));
 
         btn_search.setText("Search");
         btn_search.addActionListener(new java.awt.event.ActionListener() {
@@ -70,38 +82,53 @@ public class Exe2_6 extends javax.swing.JFrame {
         jTable1.setModel(tableModel);
         jScrollPane2.setViewportView(jTable1);
 
+        jLabel1.setText("End Date :");
+
+        jLabel2.setText("Start  Date :");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(querybox, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(244, 244, 244)
+                        .addComponent(btn_search))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(151, 151, 151)
-                                .addComponent(btn_search))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel2)
+                        .addGap(292, 292, 292)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(enddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(28, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(102, 102, 102)
+                    .addComponent(startdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(394, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(querybox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(60, 60, 60)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(enddate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_search)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(66, 66, 66)
+                    .addComponent(startdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(213, Short.MAX_VALUE)))
         );
 
         pack();
@@ -109,91 +136,35 @@ public class Exe2_6 extends javax.swing.JFrame {
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
         // TODO add your handling code here:
-        
-        if(criteria.getSelectedItem().equals("Rollno")){
-            try {
-            String sql = "{call getStud(?, ?)}";
 
-            CallableStatement stmt = conn.prepareCall(sql);
-            int no = Integer.parseInt(querybox.getText());
-            stmt.setInt(1, no); // This would set ID as 102
-            // Because second parameter is OUT so register it
-            stmt.registerOutParameter(2, java.sql.Types.VARCHAR);
-            System.out.println(stmt);
-            stmt.execute();
-
-            // Retrieve employee name with getXXX method
-            String sname = stmt.getString(2);
-
-            //fire Another Query 
-            String select_query = "SELECT "
-                    + "sd.Stud_Id,sd.Stud_Name,sd.Birth_Date,sd.City,sd.Course,sd.Semester,sd.Division,"
-                    + "sm.Mark1,sm.Mark2,sm.Mark3,sm.Total,sm.Percentage,sm.Grade "
-                    + "FROM student_details as sd LEFT JOIN student_marksheet as sm ON sd.Stud_id = sm.stud_id  "
-                    + "WHERE sd.stud_Name LIKE '%" + sname + "%'";
-            PreparedStatement select_stmt = conn.prepareStatement(select_query);
-
-            System.out.println(select_stmt);
-            ResultSet rset = select_stmt.executeQuery();
-
-            if (rset.next()) {
-                //rset.next();
-
-                tableModel.addRow(new Object[]{
-                    rset.getInt("Stud_Id"),
-                    rset.getString("Stud_Name"),
-                    rset.getInt("Mark1"),
-                    rset.getInt("Mark2"),
-                    rset.getInt("Mark3"),
-                    rset.getInt("Total"),
-                    rset.getString("Percentage"),
-                    rset.getString("Grade")
-                });
-
-            } else {
-                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            stmt.close();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        }
-        else
-        {
-            try {
-            //Class.forName("oracle.jdbc.OracleDriver");
-            //connect  to Db         
-           // String con_string = "jdbc:oracle:thin:@192.168.1.120:1521/orcl.ccrjt.com";
-            // conn = DriverManager.getConnection(con_string, "bca509", "111111");
-            
-            System.out.println("Connection Successfull !!");
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-            
         try {
-            String sql = "{call getStudRecord(?)}";
+            String sql = "{call getStudRecordBirthDate(?, ? , ?)}";
 
             CallableStatement stmt = conn.prepareCall(sql);
-            
-            String name = querybox.getText();
-            stmt.setString(1, name); // This would set ID as 102
+
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+
+            String startDate = formater.format(startdate.getDate());
+            String endDate = formater.format(enddate.getDate());
+
+            System.out.println(startDate);
+            System.out.println(endDate);
+            stmt.setString(1, startDate); // This would set startdate  
+            stmt.setString(2, endDate); // This would set enddate  
             // Because second parameter is OUT so register it
-            stmt.registerOutParameter(1, java.sql.Types.VARCHAR);
+            stmt.registerOutParameter(3, java.sql.Types.INTEGER);
             System.out.println(stmt);
             stmt.execute();
 
             // Retrieve employee name with getXXX method
-            String sname = stmt.getString(1);
+            String studid = stmt.getString(3);
 
             //fire Another Query 
             String select_query = "SELECT "
                     + "sd.Stud_Id,sd.Stud_Name,sd.Birth_Date,sd.City,sd.Course,sd.Semester,sd.Division,"
                     + "sm.Mark1,sm.Mark2,sm.Mark3,sm.Total,sm.Percentage,sm.Grade "
                     + "FROM student_details as sd LEFT JOIN student_marksheet as sm ON sd.Stud_id = sm.stud_id  "
-                    + "WHERE sd.stud_Name LIKE '%" + sname + "%'";
+                    + "WHERE sd.stud_id = " + studid;
             PreparedStatement select_stmt = conn.prepareStatement(select_query);
 
             System.out.println(select_stmt);
@@ -221,9 +192,8 @@ public class Exe2_6 extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
-        }
-        
+
+
     }//GEN-LAST:event_btn_searchActionPerformed
 
     /**
@@ -243,29 +213,32 @@ public class Exe2_6 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Exe2_6.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Exe2_7.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Exe2_6.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Exe2_7.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Exe2_6.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Exe2_7.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Exe2_6.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Exe2_7.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Exe2_6().setVisible(true);
+                new Exe2_7().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_search;
-    private javax.swing.JComboBox<String> criteria;
+    private org.jdesktop.swingx.JXDatePicker enddate;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField querybox;
+    private org.jdesktop.swingx.JXDatePicker startdate;
     // End of variables declaration//GEN-END:variables
 }
