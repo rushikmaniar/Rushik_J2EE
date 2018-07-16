@@ -4,7 +4,11 @@
  * and open the template in the editor.
  */
 package tut2;
+
+import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.*;
+
 /**
  *
  * @author Admin
@@ -15,8 +19,20 @@ public class Exe2_6 extends javax.swing.JFrame {
      * Creates new form Exe2_6
      */
     DefaultTableModel tableModel;
+    public Connection conn = null;
+
     public Exe2_6() {
         initComponents();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            //connect  to Db         
+            String con_string = "jdbc:mysql://localhost:3306/student";
+            conn = DriverManager.getConnection(con_string, "root", "");
+            System.out.println("Connection Successfull !!");
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -49,7 +65,7 @@ public class Exe2_6 extends javax.swing.JFrame {
         tableModel = new DefaultTableModel( new Object [][] {
         },
         new String [] {
-            "Roll No", "Student Name", "Mark 1", "Mark 2", "Mark 3", "Percentage", "Grade"
+            "Roll No", "Student Name", "Mark 1", "Mark 2", "Mark 3", "Total","Percentage","Grade"
         });
         jTable1.setModel(tableModel);
         jScrollPane2.setViewportView(jTable1);
@@ -93,6 +109,117 @@ public class Exe2_6 extends javax.swing.JFrame {
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
         // TODO add your handling code here:
+        
+        if(querybox.getText() == "Rollno"){
+            try {
+            String sql = "{call getStud(?, ?)}";
+
+            CallableStatement stmt = conn.prepareCall(sql);
+            int no = Integer.parseInt(querybox.getText());
+            stmt.setInt(1, no); // This would set ID as 102
+            // Because second parameter is OUT so register it
+            stmt.registerOutParameter(2, java.sql.Types.VARCHAR);
+            System.out.println(stmt);
+            stmt.execute();
+
+            // Retrieve employee name with getXXX method
+            String sname = stmt.getString(2);
+
+            //fire Another Query 
+            String select_query = "SELECT "
+                    + "sd.Stud_Id,sd.Stud_Name,sd.Birth_Date,sd.City,sd.Course,sd.Semester,sd.Division,"
+                    + "sm.Mark1,sm.Mark2,sm.Mark3,sm.Total,sm.Percentage,sm.Grade "
+                    + "FROM student_details as sd LEFT JOIN student_marksheet as sm ON sd.Stud_id = sm.stud_id  "
+                    + "WHERE sd.stud_Name LIKE '%" + sname + "%'";
+            PreparedStatement select_stmt = conn.prepareStatement(select_query);
+
+            System.out.println(select_stmt);
+            ResultSet rset = select_stmt.executeQuery();
+
+            if (rset.next()) {
+                //rset.next();
+
+                tableModel.addRow(new Object[]{
+                    rset.getInt("Stud_Id"),
+                    rset.getString("Stud_Name"),
+                    rset.getInt("Mark1"),
+                    rset.getInt("Mark2"),
+                    rset.getInt("Mark3"),
+                    rset.getInt("Total"),
+                    rset.getString("Percentage"),
+                    rset.getString("Grade")
+                });
+
+            } else {
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            stmt.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        }else{
+            try {
+            Class.forName("oracle.jdbc.OracleDriver");
+            //connect  to Db         
+            String con_string = "jdbc:oracle:thin:@192.168.1.120:1521/orcl.ccrjt.com";
+             conn = DriverManager.getConnection(con_string, "bca509", "111111");
+            System.out.println("Connection Successfull !!");
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+            
+        try {
+            String sql = "{call getStud(?, ?)}";
+
+            CallableStatement stmt = conn.prepareCall(sql);
+            int no = Integer.parseInt(querybox.getText());
+            String name = querybox.getText();
+            stmt.setString(1, name); // This would set ID as 102
+            // Because second parameter is OUT so register it
+            stmt.registerOutParameter(2, java.sql.Types.VARCHAR);
+            System.out.println(stmt);
+            stmt.execute();
+
+            // Retrieve employee name with getXXX method
+            String sname = stmt.getString(2);
+
+            //fire Another Query 
+            String select_query = "SELECT "
+                    + "sd.Stud_Id,sd.Stud_Name,sd.Birth_Date,sd.City,sd.Course,sd.Semester,sd.Division,"
+                    + "sm.Mark1,sm.Mark2,sm.Mark3,sm.Total,sm.Percentage,sm.Grade "
+                    + "FROM student_details as sd LEFT JOIN student_marksheet as sm ON sd.Stud_id = sm.stud_id  "
+                    + "WHERE sd.stud_Name LIKE '%" + sname + "%'";
+            PreparedStatement select_stmt = conn.prepareStatement(select_query);
+
+            System.out.println(select_stmt);
+            ResultSet rset = select_stmt.executeQuery();
+
+            if (rset.next()) {
+                //rset.next();
+
+                tableModel.addRow(new Object[]{
+                    rset.getInt("Stud_Id"),
+                    rset.getString("Stud_Name"),
+                    rset.getInt("Mark1"),
+                    rset.getInt("Mark2"),
+                    rset.getInt("Mark3"),
+                    rset.getInt("Total"),
+                    rset.getString("Percentage"),
+                    rset.getString("Grade")
+                });
+
+            } else {
+                JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            stmt.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        }
         
     }//GEN-LAST:event_btn_searchActionPerformed
 

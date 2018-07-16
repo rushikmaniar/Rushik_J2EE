@@ -108,7 +108,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tableModel = new DefaultTableModel( new Object [][] {&#xa;        },&#xa;        new String [] {&#xa;            &quot;Roll No&quot;, &quot;Student Name&quot;, &quot;Mark 1&quot;, &quot;Mark 2&quot;, &quot;Mark 3&quot;, &quot;Percentage&quot;, &quot;Grade&quot;&#xa;        });"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tableModel = new DefaultTableModel( new Object [][] {&#xa;        },&#xa;        new String [] {&#xa;            &quot;Roll No&quot;, &quot;Student Name&quot;, &quot;Mark 1&quot;, &quot;Mark 2&quot;, &quot;Mark 3&quot;, &quot;Total&quot;,&quot;Percentage&quot;,&quot;Grade&quot;&#xa;        });"/>
           </AuxValues>
         </Component>
       </SubComponents>
