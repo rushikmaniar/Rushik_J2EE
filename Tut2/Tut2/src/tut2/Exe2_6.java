@@ -154,6 +154,7 @@ public class Exe2_6 extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "No Record Found", "Error", JOptionPane.ERROR_MESSAGE);
             }
             stmt.close();
+            conn.close();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Oops!! " + e, "Error", JOptionPane.ERROR_MESSAGE);
@@ -162,10 +163,10 @@ public class Exe2_6 extends javax.swing.JFrame {
         else
         {
             try {
-            //Class.forName("oracle.jdbc.OracleDriver");
+            Class.forName("oracle.jdbc.OracleDriver");
             //connect  to Db         
-           // String con_string = "jdbc:oracle:thin:@192.168.1.120:1521/orcl.ccrjt.com";
-            // conn = DriverManager.getConnection(con_string, "bca509", "111111");
+            String con_string = "jdbc:oracle:thin:@192.168.1.120:1521/orcl.ccrjt.com";
+             conn = DriverManager.getConnection(con_string, "bca509", "111111");
             
             System.out.println("Connection Successfull !!");
         } catch (Exception e) {
@@ -174,7 +175,7 @@ public class Exe2_6 extends javax.swing.JFrame {
         }
             
         try {
-            String sql = "{call getStudRecord(?)}";
+            String sql = "{call GETSTUD(?)}";
 
             CallableStatement stmt = conn.prepareCall(sql);
             
@@ -187,15 +188,15 @@ public class Exe2_6 extends javax.swing.JFrame {
 
             // Retrieve employee name with getXXX method
             String sname = stmt.getString(1);
-
+              
             //fire Another Query 
             String select_query = "SELECT "
                     + "sd.Stud_Id,sd.Stud_Name,sd.Birth_Date,sd.City,sd.Course,sd.Semester,sd.Division,"
                     + "sm.Mark1,sm.Mark2,sm.Mark3,sm.Total,sm.Percentage,sm.Grade "
                     + "FROM student_details as sd LEFT JOIN student_marksheet as sm ON sd.Stud_id = sm.stud_id  "
-                    + "WHERE sd.stud_Name LIKE '%" + sname + "%'";
+                    + "WHERE sd.stud_Name = ?;";
             PreparedStatement select_stmt = conn.prepareStatement(select_query);
-
+            select_stmt.setString(1, "Rushik");
             System.out.println(select_stmt);
             ResultSet rset = select_stmt.executeQuery();
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	 version="3.0">
+    
+    <servlet>
+        <servlet-name>Tut3_2_GenericServlet</servlet-name>
+        <servlet-class>demo.Tut3_2_GenericServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Tut3_2_GenericServlet</servlet-name>
+        <url-pattern>/Tut3_2_GenericServlet</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>Tut3_3_lifecycle</servlet-name>
+        <servlet-class>demo.Tut3_3_lifecycle</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Tut3_3_lifecycle</servlet-name>
+        <url-pattern>/Tut3_3_lifecycle</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>tut3_5_ValidateUser</servlet-name>
+        <servlet-class>Exe5package.tut3_5_ValidateUser</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>tut3_5_ValidateUser</servlet-name>
+        <url-pattern>/tut3_5_ValidateUser</url-pattern>
+    </servlet-mapping>
+    
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>
