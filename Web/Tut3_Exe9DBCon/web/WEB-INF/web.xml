@@ -4,12 +4,15 @@
         <servlet-name>Mysql</servlet-name>
         <servlet-class>demo.Mysql</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Oracle</servlet-name>
+        <servlet-class>demo.Oracle</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Mysql</servlet-name>
         <url-pattern>/Mysql</url-pattern>
     </servlet-mapping>
-    
-     <servlet>
+    <servlet>
         <servlet-name>Access</servlet-name>
         <servlet-class>demo.Access</servlet-class>
     </servlet>
@@ -17,7 +20,10 @@
         <servlet-name>Access</servlet-name>
         <url-pattern>/Access</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>Oracle</servlet-name>
+        <url-pattern>/Oracle</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

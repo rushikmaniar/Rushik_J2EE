@@ -8,6 +8,16 @@
         <servlet-name>Exe13</servlet-name>
         <url-pattern>/Exe13</url-pattern>
     </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>Exe12</servlet-name>
+        <servlet-class>demo.Exe12</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Exe12</servlet-name>
+        <url-pattern>/Exe12</url-pattern>
+    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Exe5package;
+package demo;
 
-import demo.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Admin
+ * @author rushikwin8
  */
-@WebServlet(name = "tut3_5_ValidateUser", urlPatterns = {"/tut3_5_ValidateUser"})
-public class tut3_5_ValidateUser extends HttpServlet {
+public class Exe12 extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,45 +32,8 @@ public class tut3_5_ValidateUser extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       
-        try (PrintWriter out = response.getWriter()) {
-
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet tut3_5_ValidateUser</title>");
-            out.println("</head>");
-            out.println("<body>");
-            
-            String username, password;
-            username = request.getParameter("username");
-            password = request.getParameter("password");
-
-            if (username == null || password == null || username.equals("") || password.equals("")) {
-                out.println("<h3>enter Username And Passowrd</h3>");
-            } else {
-                out.println("<h3>Username :" + username + "</h3><br>");
-                out.println("<h3>Password :" + password + "</h3><br>");
-            }
-
-            out.println("<form method='post' id='form1'>");
-            out.println("<table border=5>"
-                    + "<tr>"
-                    + "<td>UserName</td>"
-                    + "<td><input type='text' name='username'></td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<tr><td>Password :</td>"
-                    + "<td><input type='password' name='password'></td>"
-                    + "</tr>"
-                    + "<td colspan=2 align='center'><input type='submit' value='submit'></td>"
-                    + "</table>");
-            out.println("</form>");
-
-            out.println("</body>");
-            out.println("</html>");
-        }
+        RequestDispatcher rd = request.getRequestDispatcher("Sample.jsp");
+        rd.include(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -98,9 +60,22 @@ public class tut3_5_ValidateUser extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        response.setContentType("text/html");
+        PrintWriter printWriter;
+        String forward = request.getParameter("forward");
+        try {
+            printWriter = response.getWriter();
+            if (forward.equals("1")) {
+                RequestDispatcher rd = request.getRequestDispatcher("forward.html");
+                rd.forward(request, response);
+            } else {
+                printWriter.println("<title>Forward Page</title>");
+                printWriter.println("<h1>Your Page Not Forward !!!</h1>");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
