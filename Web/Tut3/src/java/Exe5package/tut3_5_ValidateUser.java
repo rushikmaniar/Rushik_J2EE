@@ -48,7 +48,7 @@ public class tut3_5_ValidateUser extends HttpServlet {
             username = request.getParameter("username");
             password = request.getParameter("password");
 
-            if (username == null || password == null || username == "" || password == "") {
+            if (username == null || password == null || username.equals("") || password.equals("")) {
                 out.println("<h3>enter Username And Passowrd</h3>");
             } else {
                 out.println("<h3>Username :" + username + "</h3><br>");
