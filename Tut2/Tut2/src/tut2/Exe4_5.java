@@ -51,6 +51,7 @@ public class Exe4_5 extends javax.swing.JFrame {
                     + " LEFT JOIN student_marksheet as sm ON sd.Stud_Id = sm.Stud_Id";
             
             PreparedStatement stmt = conn.prepareStatement(select_query);
+            
             System.out.println(stmt);
             this.rset = stmt.executeQuery();
 
