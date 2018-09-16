@@ -7,49 +7,58 @@
 
 <%@page import="java.security.*" %>
 <%@page import="java.util.*" %>
+<%@page import="java.math.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="conn.jsp" %>
-<% 
-    
-    if(session.getAttribute("site-admin") != null){
+<%    if (session.getAttribute("stud_id") != null && session.getAttribute("stud_email") != null &&  session.getAttribute("Type") != null)  {
         //session is running
-        out.print("Session is set");
-    }
-    else{
-    //session is not running , check for post data
-        if(request.getParameter("username") != null && request.getParameter("password") != null){
+        String type = session.getAttribute("Type").toString();
+    
+        //check if it is admin or student
+        if(type.equals("A")){
+            //it is admin
+            response.sendRedirect("http://localhost:8080/Tut4/studentmanage.jsp");
+        }
+        else if (type.equals("S")){
+            //it is student
+            response.sendRedirect("http://localhost:8080/Tut4/studprofile.jsp");
+        }
+        else{
+            out.print("<script type='text/javascript'>alert('Something Went Wrong . Try Later');</script>");
+        }
+    } else {
+        //session is not running , check for post data
+        if (request.getParameter("username") != null && request.getParameter("password") != null) {
             //there is post data .check to database and set session
             String username = request.getParameter("username");
             String pas = request.getParameter("password");
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            pas = md.digest(pas.getBytes()).toString();
             
-            String selqry = "SELECT * FROM studdetail WHERE stud_email = " + username + " AND stud_pass = " + pas + " LIMIT 1";
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(pas.getBytes(),0,pas.length());
+            pas = new BigInteger(1,md.digest()).toString(16);
+            
+            String selqry = "SELECT * FROM studdetail WHERE stud_email = '" + username + "' AND stud_pass = '" + pas + "' LIMIT 1";
+            
             PreparedStatement stmt = conn.prepareStatement(selqry);
             ResultSet rset = stmt.executeQuery();
+            
             if (rset.next()) {
+                
                 //record found set it to session
-                Object temp = 0;
-                
-                HashMap userdetails = new HashMap();
-                userdetails.put("username", (temp = rset.getString("StudId")));
-                userdetails.put("stud_email", (temp = rset.getString("stud_email")));
-                userdetails.put("StudNm", (temp = rset.getString("StudNm")));
-                userdetails.put("Contact", (temp = rset.getString("Contact")));
-                userdetails.put("Type", (temp = rset.getString("Type")));
-                userdetails.put("DeptNo", (temp = rset.getString("DeptNo")));
-                
-                
-             
+                session.setAttribute("stud_id", rset.getString("StudId"));
+                session.setAttribute("stud_email", rset.getString("stud_email"));
+                session.setAttribute("Type", rset.getString("Type"));
+                response.sendRedirect("http://localhost:8080/Tut4");
             } else {
-                //no record found username or passowrd incorrect
                 
+                //no record found username or passowrd incorrect
+                out.print("<script type='text/javascript'>alert('UserName or Password Wrong !');</script>");
             }
-        }else{
+        } else {
             //nothing
-        
+            
         }
-        out.print("Session is not set");
+        
     }
     
 %>
@@ -84,7 +93,7 @@
                         </tr>
                         <tr>
                             <td>Password</td>
-                            <td><input type="text" class="form-control" name="password"></td>
+                            <td><input type="password" class="form-control" name="password"></td>
                         </tr>
                         <tr>
                             <td colspan="2" align="center"><button type="submit" class="btn btn-primary">Sign In</button></td>
@@ -121,7 +130,7 @@
                     }
                 });
             });
-
+            
         </script>
     </body>
 </html>
