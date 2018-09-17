@@ -6,6 +6,11 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="conn.jsp" %>
+<% 
+    if(request.getParameter("error") != null){
+        out.print("<script type='text/javascript>" + request.getParameter("error") + "</script>'");
+    }
+%>
 <%    if (session.getAttribute("stud_id") != null && session.getAttribute("stud_email") != null && session.getAttribute("Type") != null) {
         //session is running
         String type = session.getAttribute("Type").toString();

@@ -49,7 +49,7 @@
                         //now check if data in post
                         if (request.getParameter("studentaddeditfrm_stud_email") != null) {
                             //check if add or edit
-                            String edit_qry;
+                            String edit_qry = "";
                             String update_id = request.getParameter("studentaddeditfrm_stud_id");
                             String stud_username = request.getParameter("studentaddeditfrm_stud_email");
                             String stud_pass = "111111";
@@ -57,36 +57,58 @@
                             String stud_Address = request.getParameter("studentaddeditfrm_Address");
                             String stud_Contact = request.getParameter("studentaddeditfrm_Contact");
                             String stud_DeptNo = request.getParameter("studentaddeditfrm_DeptNo");
-                            if (request.getParameter("studentaddeditfrm_stud_id") != null) {
-                                //edit record
 
-                                edit_qry = "UPDATE studdetail "
-                                        + "SET stud_email = '" + stud_username + "',"
-                                        + " StudNm = '" + stud_StudNm + "',"
-                                        + " Address = '" + stud_Address + "',"
-                                        + " Contact = " + stud_Contact + ","
-                                        + " DeptNo = " + stud_DeptNo
-                                        + " WHERE StudId = " + update_id;
+                            if (request.getParameter("studentaddeditfrm_stud_id") != null) {
+                                //edit record check for record exists
+                                String checkselqry = "SELECT * FROM studdetail WHERE stud_email = '" + stud_username + "' AND StudId !=" + update_id;
+
+                                PreparedStatement checkstmt = conn.prepareStatement(checkselqry);
+                                ResultSet checkrset = checkstmt.executeQuery();
+                                if (checkrset.next()) {
+                                    //record already Exits
+                                    
+                                } else {
+                                    edit_qry = "UPDATE studdetail "
+                                            + "SET stud_email = '" + stud_username + "',"
+                                            + " StudNm = '" + stud_StudNm + "',"
+                                            + " Address = '" + stud_Address + "',"
+                                            + " Contact = " + stud_Contact + ","
+                                            + " DeptNo = " + stud_DeptNo
+                                            + " WHERE StudId = " + update_id;
+                                    PreparedStatement stud_stmt = conn.prepareStatement(edit_qry);
+                                    int studrecord = stud_stmt.executeUpdate();
+                                }
 
                             } else {
                                 //add record
-                                MessageDigest md = MessageDigest.getInstance("MD5");
-                                md.update(stud_pass.getBytes(), 0, stud_pass.length());
-                                stud_pass = new BigInteger(1, md.digest()).toString(16);
-                                edit_qry = "INSERT INTO studdetail (stud_email,stud_pass,StudNm,Address,Contact,Type,DeptNo)"
-                                        + " VALUES ("
-                                        + "'" + stud_username + "',"
-                                        + "'" + stud_pass + "',"
-                                        + "'" + stud_StudNm + "',"
-                                        + "'" + stud_Address + "',"
-                                        + stud_Contact + ","
-                                        + "'S',"
-                                        + stud_DeptNo
-                                        + ")";
+                                String checkselqry = "SELECT * FROM studdetail WHERE stud_email = '" + stud_username + "'";
+
+                                PreparedStatement checkstmt = conn.prepareStatement(checkselqry);
+                                ResultSet checkrset = checkstmt.executeQuery();
+                                if (checkrset.next()) {
+                                    //record already Exits
+                                    
+                                } else {
+                                    MessageDigest md = MessageDigest.getInstance("MD5");
+                                    md.update(stud_pass.getBytes(), 0, stud_pass.length());
+                                    stud_pass = new BigInteger(1, md.digest()).toString(16);
+                                    String ins_qry = "INSERT INTO studdetail (stud_email,stud_pass,StudNm,Address,Contact,Type,DeptNo)"
+                                            + " VALUES ("
+                                            + "'" + stud_username + "',"
+                                            + "'" + stud_pass + "',"
+                                            + "'" + stud_StudNm + "',"
+                                            + "'" + stud_Address + "',"
+                                            + stud_Contact + ","
+                                            + "'S',"
+                                            + stud_DeptNo
+                                            + ")";
+                                    PreparedStatement stud_stmt = conn.prepareStatement(ins_qry);
+                                    int studrecord = stud_stmt.executeUpdate();
+
+                                }
 
                             }
-                            PreparedStatement stud_stmt = conn.prepareStatement(edit_qry);
-                            int studrecord = stud_stmt.executeUpdate();
+
                             response.sendRedirect("http://localhost:8080/Tut4/studentmanage.jsp");
                         } else {
                             //no post data display form 
@@ -105,7 +127,7 @@
 
                             } else {
                                 //edit record
-                                String studselqry = "SELECT * FROM studdetail WHERE StudId = " + stud_id + " LIMIT 1";
+                                String studselqry = "SELECT * FROM studdetail WHERE StudId = " + studid + " LIMIT 1";
 
                                 PreparedStatement studstmt = conn.prepareStatement(studselqry);
                                 studrecord = studstmt.executeQuery();
@@ -113,8 +135,11 @@
                                 if (studrecord.next()) {
                                     //record found
                                 } else {
-                                    out.print("<script type='text/javascript'>alert('Hey Record Not Found .');</script>");
-                                    response.sendRedirect("http://localhost:8080/Tut4/studentmanage.jsp");
+                                   String error = "Record Not Found !";
+                                   
+                                     out.print("<script type='text/javascript'>alert('" + error +"');</script>");
+                                     response.wait(3000);
+                                     response.sendRedirect("http://localhost:8080/Tut4/studentmanage.jsp");
                                 }
                             }
         %>

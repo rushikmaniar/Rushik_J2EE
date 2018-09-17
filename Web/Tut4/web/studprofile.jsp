@@ -64,7 +64,9 @@
     <body>
         <div class="row">
             <div class="col-md-12">
-                <h1 align="center">Student Profile Page</h1>
+                
+                <h1 >Hi <%= rset.getString("StudNm") %></h1><br>
+                <h3 align="center"><%= rset.getString("StudNm") %> 's Profile</h3>
                 <div class="float-right">
                     <a href="logout.jsp"><button class="btn btn-info">Logout</button></a>
                 </div>
