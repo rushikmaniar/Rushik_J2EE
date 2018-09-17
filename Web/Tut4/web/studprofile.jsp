@@ -33,7 +33,7 @@
                 String studentprofilefrm_DeptNo = request.getParameter("studentprofilefrm_DeptNo");
 
                 String updateqry = "UPDATE studdetail SET stud_email = '" + studentprofilefrm_stud_email + "' , StudNm = '" + studentprofilefrm_StudNm + "' , Address = '" + studentprofilefrm_Address + "' , Contact = " + studentprofilefrm_Contact + " ,DeptNo = " + studentprofilefrm_DeptNo + " WHERE StudId = " + studentprofilefrm_stud_id;
-                out.println(updateqry);
+                //out.println(updateqry);
                 PreparedStatement update_stmt = conn.prepareStatement(updateqry);
                 int update_rset = update_stmt.executeUpdate();
                 response.sendRedirect("http://localhost:8080/Tut4/studprofile.jsp");
