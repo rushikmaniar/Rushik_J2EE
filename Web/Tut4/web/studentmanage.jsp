@@ -86,7 +86,7 @@
                             <td><%= studrecord.getString("sd.Contact")%></td>
                             <td><%= studrecord.getString("dm.DeptName")%></td>
                             <td><a href="editstud.jsp?stud_id=<%= studrecord.getString("sd.StudId")%>"><button class="btn btn-primary">Edit</button></a></td>
-                            <td><a href="delstud.jsp?stud_id=<%= studrecord.getString("sd.StudId")%>"><button class="btn btn-danger">Delete</button></a></td>
+                            <td><a href="delstud.jsp?stud_id=<%= studrecord.getString("sd.StudId")%>"><button class="btn btn-danger" onclick="if(confirm('Are U Sure Want To Delete Record ?')){return true;}else{return false;}">Delete</button></a></td>
 
                         </tr>
                         <% } %>
